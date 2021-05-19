@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:fragment="footercut">
+		<div>
+			<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#buttonNavBar">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="buttonNavBar">
+					<ul class="navbar-nav">
+						<li class="nav-item"><a class="nav-link dropdown-toggle"
+							href=""> About Us </a></li>
+						<li class="nav-item"><a class="nav-link dropdown-toggle"
+							href=""> Privacy Notice </a></li>
+						<li class="nav-item"><a class="nav-link dropdown-toggle"
+							href=""> Returns &amp; Refunds </a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div th:fragment="footernote" class="text-center m-3">
+			<p>[[${COPY_RIGHT}]]</p>
+		</div>
+	</div>
+</body>
+</html>

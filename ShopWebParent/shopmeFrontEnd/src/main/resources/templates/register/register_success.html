@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org">
+<head th:replace="fragment :: page_head(title)">
+<meta charset="UTF-8">
+<title>Welcome to Shop Me</title>
+</head>
+<body>
+	<div th:replace="navigation :: FrontEndMenu"></div>
+	<div class="container-fluid">
+		<div>&nbsp;</div>
+		<div class="text-center">
+			<h2>Customer Registration</h2>
+			<h4>You have been registered</h4>
+			<p>Please check your email to verify your account</p>
+			<p><a th:href="@{/login}">Login Here</a>
+		</div>
+
+		<div class="row">
+			<div class="col" th:each="cat : ${listenabled}">
+				<div>
+					<img alt="category image" th:src="@{cat.imagePath}" width="80px;">
+				</div>
+				<div>
+					<a th:href="@{'/c/' + ${cat.categoriesAlias}}">[[${cat.categoryName}]]</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="footer :: footercut"></div>
+</body>
+</html>

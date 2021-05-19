@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+		xmls:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragment :: page_head('Home Page')">
+
+<body>
+<div class="container-fluid">
+	<div>
+		<div th:replace="navigation :: Menu"></div>
+
+<!--		<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">-->
+<!--			<input type="submit" />-->
+<!--		</form>-->
+
+		<div>
+			Welcome
+			<a th:href="@{/users/accounts}"
+			sec:authentication="principal.username"></a>
+				<span sec:authentication="principal.authorities"></span>
+
+
+		</div>
+	</div>
+
+	
+	<div th:replace="fragment:: footer"></div>
+	
+</div>
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

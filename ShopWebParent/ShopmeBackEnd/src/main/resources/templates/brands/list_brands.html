@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+	xmls:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragment :: page_head('Shop Admin Home')">
+<body>
+	<div class="container-fluid">
+
+		<div th:replace="navigation :: Menu"></div>
+		&nbsp;
+		<div class="text-center">
+			<h4><a th:href="@{/brands/brand_newform}">Create New Brand</a></h4>
+			
+		</div>
+		&nbsp;
+	
+		<div th:object="${brands}">
+			<table
+				class="table table-bordered table-striped table-hover table-responsive-xl">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Logo</th>
+						<th>Name</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item: ${listbrands}">
+						<td>[[${item.brandId}]]</td>
+						<td>[[${item.brandLogo}]]</td>
+						<td>[[${item.brandName}]]</td>
+						<td><a><button>Edit</button></a> <a><button>Delete</button></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>

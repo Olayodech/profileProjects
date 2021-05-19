@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+	xmls:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragment :: page_head(${page_title})" />
+<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+<body>
+
+	<div th:replace="navigation :: Menu"></div>
+
+	&nbsp;
+
+	<div class="text-center">
+		<div>
+			<h2>Site Settings</h2>
+		</div>
+
+		<div>
+			<ul class="nav nav-tabs" id="settingTab" role="tablist">
+				<li class="nav-item"><a class="nav-link active"
+					data-toggle="tab" href="#general" role="tab"
+					aria-controls="overview" aria-selected="true">General</a></li>
+				<li class="nav-item"><a class="nav-link" data-toggle="tab"
+					href="#countries" role="tab" aria-controls="description"
+					aria-selected="false">Countries</a></li>
+				<li class="nav-item"><a class="nav-link" data-toggle="tab"
+					href="#states" role="tab" aria-controls="images"
+					aria-selected="false">States</a></li>
+				<li class="nav-item"><a class="nav-link" data-toggle="tab"
+					href="#mailServer" role="tab" aria-controls="details"
+					aria-selected="false">Mail Server</a></li>
+				<li class="nav-item"><a class="nav-link" data-toggle="tab"
+					href="#mailTemplates" role="tab" aria-controls="shipping"
+					aria-selected="false">Mail Templates</a></li>
+
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div class="tab-pane active p-3" id="general" role="tabpanel"
+					aria-labelledby="overview-tab">
+					<div th:replace="/setting/general.html :: content"></div>
+				</div>
+
+				<div class="tab-pane p-3" id="countries" role="tabpanel"
+					aria-labelledby="description-tab">
+					<h2>Countries</h2>
+					<div th:replace="/setting/countries :: content"></div>
+
+				</div>
+
+
+				<div class="tab-pane p-3" id="states" role="tabpanel"
+					aria-labelledby="images-tab">
+					<div th:replace="/setting/states :: content"></div>
+				</div>
+
+				<div class="tab-pane p-3" id="mailServer" role="tabpanel"
+					aria-labelledby="Content-tab">
+					<div>
+					<div th:replace="/setting/mailserver :: content"></div>
+					</div>
+				</div>
+
+				<div class="tab-pane p-3" id="mailTemplates" role="tabpanel"
+					aria-labelledby="shipping-tab">
+					<div th:replace="/setting/mailTemplates/mail_templates :: content"></div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="toast justify-content-center d-flex" role="alert" aria-live="polite" aria-atomic="true"
+			data-delay="3000">
+			<div role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-body">
+				<span id="toastMessage" class="alert-success"></span>
+			</div>
+			</div>
+		</div>
+		
+		
+	</div>
+	<script type="text/javascript">
+		contextpath = "[[@{/}]]"
+		var csrfHeaderName = "[[${_csrf.headerName}]]";
+		var csrfValue = "[[${_csrf.token}]]";
+		
+		$(document).ready(function(){
+			$("#customerverificationContent").richText();
+		})
+	</script>
+	<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+	<script type="text/javascript" th:src="@{/js/countrysetting.js}"></script>
+	<script th:src="@{/js/state_settings.js}"></script>
+	
+
+
+</body>
+</html>

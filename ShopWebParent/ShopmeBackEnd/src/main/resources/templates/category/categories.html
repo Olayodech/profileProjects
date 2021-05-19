@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+      xmls:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragment :: page_head('Shop Admin Home')">
+<body>
+<div class="container-fluid">
+    <div>
+        <div th:replace="navigation :: Menu"></div>
+
+        <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+            <input type="submit"/>
+        </form>
+
+    </div>
+
+
+    <div class="text-center">
+        <h2>Manage Users | Create New Category</h2>
+        &nbsp; &nbsp;
+        <a th:href="@{/category/categoryform}">Create New Category</a>
+
+        &nbsp; |&nbsp;
+        <a th:href="@{/users/export_csv}">Export To CSV</a>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+
+    <div>
+        <form th:action="@{/users/page/1}" class="form-inline m-3">
+            <input type="hidden" name="sortField" th:value="${sortField}">
+            <input type="hidden" name="sortDir" th:value="${sortDir}">
+
+            Filter:&nbsp;
+            <input type="search" name="keyword" th:value="${keyword}" class="form-control" required>
+            &nbsp;&nbsp;
+            <input type="submit" value="search" class="btn btn-primary">
+            &nbsp;&nbsp;
+            <input type="button" value="clear" class="btn btn-secondary">
+        </form>
+    </div>
+
+    <div class="container-fluid">
+        <div>
+            <table class="table table-bordered table-striped table-hover table-responsive-xl">
+                <thead>
+                <tr class="thead-dark">
+                    <th>Id</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Enable</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="cat : ${listcategory}">
+                    <td>[[${cat.categoryId}]]</td>
+                    <td>
+                    	<img alt="category Image" th:src="@{${cat.imagePath}}" style="width: 100px" height="250px" />
+                    </td>
+                    <td>[[${cat.categoryName}]]</td>
+                    <td>[[${cat.categoryEnabled}]]</td>
+                    <td>
+                        <a th:href="@{'category/getupdate/' + ${cat.categoryId}}">
+                            <button>Edit</button>
+                        </a>
+                        <a th:href="@{'category/deleteuser/' + ${cat.categoryId}}">
+                            <button>Delete</button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="fragment:: footer"></div>
+
+</html>

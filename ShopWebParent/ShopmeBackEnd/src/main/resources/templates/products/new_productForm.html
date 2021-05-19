@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+	xmls:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragment :: page_head(${page_title})" />
+<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+<body>
+
+	<div th:replace="navigation :: Menu"></div>
+
+	&nbsp;
+
+	<div class="text-center">
+		<form class="" th:action="@{/products/save}" method="post"
+			enctype="multipart/form-data" onsubmit="return checkproduct(this);" th:object=${products}
+			style="width: 550px; margin: auto;">
+			<input type="hidden" th:field="*{productId}" />
+			<input th:if="${products.category != null}" type="hidden" id="categoryId" th:value="${products.category.categoryId}">
+			<div>
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item"><a class="nav-link active"
+						data-toggle="tab" href="#overview" role="tab"
+						aria-controls="overview" aria-selected="true">Over View</a></li>
+					<li class="nav-item"><a class="nav-link" data-toggle="tab"
+						href="#description" role="tab" aria-controls="description"
+						aria-selected="false">Descriptions</a></li>
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="tab" href="#images" role="tab" aria-controls="images"
+						aria-selected="false">Images</a></li>
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="tab" href="#details" role="tab"
+						aria-controls="details" aria-selected="false">Details</a></li>
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="tab" href="#shipping" role="tab"
+						aria-controls="shipping" aria-selected="false">Shipping</a></li>
+
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active p-3" id="overview" role="tabpanel"
+						aria-labelledby="overview-tab">
+						<div th:replace="products/productoverview :: content"></div>
+					</div>
+
+					<div class="tab-pane" id="description" role="tabpanel"
+						aria-labelledby="description-tab">
+						<div th:replace="products/productdescription :: content"></div>
+					</div>
+
+
+					<div class="tab-pane" id="images" role="tabpanel"
+						aria-labelledby="images-tab">
+						<div th:replace="products/product_images :: content"></div>	
+					</div>
+					
+					<div class="tab-pane p-3" id="details" role="tabpanel"
+						aria-labelledby="Content-tab">
+						<div th:replace="products/productDetails :: content"></div>
+						<div>
+							<input type="button" class="btn btn-secondary" value="Add More Details"  onclick="addNextDetailsSection()"/>
+						</div>
+					</div>
+					
+					<div class="tab-pane p-3" id="shipping" role="tabpanel"
+						aria-labelledby="shipping-tab">
+						<div th:replace="products/productShipping :: content"></div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="text-center">
+				<input type="submit" value="Save" class="btn btn-primary m-3">
+				<input type="button" value="Cancel" class="btn btn-secondary"
+					id="buttonCamcel">
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript">
+		var extraImagesCount = 0
+		moduleURL = "[[@{/products}]]";
+		defaultImageThumbnail = "[[@{/images/ecom.jpg}]]"
+		brandModuleUrl = "[[@{/brands}]]"
+		dropdownBrands = $("#brands");
+		dropdownCategory = $("#category");
+		
+			
+		$(document).ready(function(){
+		
+			$("#shortDescription").richText();
+			$("#fullDescription").richText();
+		
+			dropdownBrands.change(function(){
+				dropdownCategory.empty();
+				getCategories()
+			});
+			
+			getCategories();
+			
+			$("input[name='extraImage']").each(function(index){
+				extraImagesCount++;
+				$(this).change(function(){
+					showExtraImageThumbnail(this, index);
+					
+				})
+			});
+			
+			
+		});
+		
+		function showExtraImageThumbnail(fileImput, index){
+			var file = fileImput.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e){
+				$("#extraThumbnail"  + index).attr("src", e.target.result);
+			}
+			reader.readAsDataURL(file);
+			if (index >= extraImagesCount -1){
+						addNextExtraImageSection(index + 1);
+			}
+		}
+		
+		function addNextExtraImageSection(index){
+			htmlExtraImage = `
+				<div class="col border m-3 p-2">
+					<div id="extraImageHeader${index}" id="divExtraImage${index}">
+						<label>Extra Image #${index + 1}</label>
+					</div>
+					<div class="m-2">
+						<img id="extraThumbnail${index}" style="height: 150px" alt="ExtraImage #${index + 1} preview"
+							class="img-fluid" th:src="${defaultImageThumbnail}">
+					</div>
+					<div>
+						<input type="file" name="extraImage"
+						onchange ="showExtraImageThumbnail(this, ${index})"
+							accept="image/png, image/jpeg">
+					</div>
+				</div>
+			`;
+			htmlLinkRemove = `<a class="btn fas fa-times-circle fa-2x icon-green float-right" title="remove image"
+			href="javascript:removeExtraimage(${index -1})"></a>`;
+			
+			
+			$("#divextraproductimages").append(htmlExtraImage);
+			$("#extraImageHeader" + (index -1)).append(htmlLinkRemove);
+			extraImagesCount++;
+			
+		}
+		
+		function removeExtraimage(index){
+			$("#divExtraImage" + index).remove();
+			extraImagesCount--;
+		}
+		
+		function getCategories(){
+		
+		brandId = dropdownBrands.val();
+		url = brandModuleUrl + "/" + brandId + "/categories";
+		
+		$.get(url, function(responseJson){
+			$.each(responseJson, function(index, category) {
+				$("<option>").val(category.id).text(category.name).appendTo(dropdownCategory);
+			});
+			
+		});
+		
+}
+
+function checkproduct(form){
+		console.log("Inside get Checkproduct")
+
+			productId = $("#productId").val();
+			productName = $("#productName").val();
+			csrfValue = $("input[name='_csrf']").val();
+			
+			url = "[[@{/products/checkunique}]]";
+			params = {id:productId, name:productName, _csrf: csrfValue};
+			
+			$.post(url, params, function(response){
+				if(response == "OK"){
+					form.submit();
+				}else if (response == "Duplicate"){
+					alert("unable to proceed due to duplicated")
+				}
+			}).fail(function(){
+				alert("unable to proceed")
+			});
+			return false;
+		}
+		
+
+	</script>
+	<script type="text/javascript" th:src="@{/js/product_form_details.js}"></script>
+</body>
+</html>

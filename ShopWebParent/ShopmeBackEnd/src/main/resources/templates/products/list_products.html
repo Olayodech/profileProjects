@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+      xmls:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragment :: page_head('Shop Admin Home')">
+<body>
+<div class="container-fluid">
+    <div>
+        <div th:replace="navigation :: Menu"></div>
+
+        <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+            <input type="submit"/>
+        </form>
+
+    </div>
+
+
+    <div class="text-center">
+        <h2>Manage Products | Create New Products</h2>
+        &nbsp; &nbsp;
+        <a th:href="@{/product/productForm}">Create New Products</a>
+
+        &nbsp; |&nbsp;
+        <a th:href="@{/users/export_csv}">Export To CSV</a>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+
+    <div>
+        <form th:action="@{/users/page/1}" class="form-inline m-3">
+            <input type="hidden" name="sortField" th:value="${sortField}">
+            <input type="hidden" name="sortDir" th:value="${sortDir}">
+
+            Filter:&nbsp;
+            <input type="search" name="keyword" th:value="${keyword}" class="form-control" required>
+            &nbsp;&nbsp;
+            <input type="submit" value="search" class="btn btn-primary">
+            &nbsp;&nbsp;
+            <input type="button" value="clear" class="btn btn-secondary">
+        </form>
+    </div>
+
+    <div class="container-fluid">
+        <div>
+            <table class="table table-bordered table-striped table-hover table-responsive-xl">
+                <thead>
+                <tr class="thead-dark">
+                    <th>Id</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Enabled</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="prod : ${listproducts}">
+                    <td>[[${prod.productId}]]</td>
+                    <td>
+                    	<img alt="product Image" th:src="@{${prod.mainImagePath}}" style="width: 100px" height="250px" class="img-fluid"/>
+                    </td>
+                    <td>[[${prod.productName}]]</td>
+                    <td>[[${prod.brands.brandName}]]</td>
+                    <td>[[${prod.category.categoryName}]]</td>
+                    <td id="enabled">[[${prod.enabled}]]</td>
+                    <td>
+                    <a class="fas fa-file-alt fa-2x icon-green"
+                    th:href="@{'products/details/' + ${prod.productId}}"
+                    title="View Details of this product">View</a>
+                        <a th:href="@{'product/getupdate/' + ${prod.productId}}">
+                            <button>Edit</button>
+                        </a>
+                        &nbsp;
+                        <a th:href="@{'products/deleteproduct/' + ${prod.productId}}"> 
+                            <button>Delete</button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="fragment:: footer"></div>
+
+</html>

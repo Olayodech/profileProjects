@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+	xmls:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" id="divProductDetails"> 
+		<p>Product Details</p>
+		<div class="form-inline" id="productDetail0">
+			<label class="m-3">Name:</label> <input type="text" class="form-control w-25"
+				name="detailsName" maxlength="255" />
+			 <label class="m-3">Value:</label> <input
+				type="text" class="form-control w-25" name="detailsValue" maxlength="255" />
+		</div>
+	</div>
+
+</body>
+<div th:replace="fragment:: footer"></div>
+
+</html>
