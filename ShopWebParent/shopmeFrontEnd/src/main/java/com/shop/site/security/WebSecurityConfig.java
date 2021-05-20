@@ -1,5 +1,6 @@
 package com.shop.site.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,11 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
+	@Autowired
+	private CustomerOauth2UserService customerOauth2UserService;
+	
+	@Autowired private Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -33,12 +39,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.usernameParameter("email")
 			.permitAll()
 		.and()
+		.oauth2Login()
+			.loginPage("/login")
+			.userInfoEndpoint()
+			.userService(customerOauth2UserService)
+			.and()
+			.successHandler(oauth2LoginSuccessHandler)
+		.and()
 		.logout().permitAll()
 		.and()
 		.rememberMe()
 			.key("123457444_rtyuioddfghjkeetyuie6ee774g")
 			.tokenValiditySeconds(14 + 24 * 60 * 60);
-		
 	}
 
 	@Override

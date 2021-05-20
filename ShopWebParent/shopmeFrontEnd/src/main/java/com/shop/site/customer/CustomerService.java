@@ -46,6 +46,10 @@ public class CustomerService {
 		
 		customersRepository.save(customer);
 	}
+	
+	public Customer getCustomerByEmail(String email) {
+		return customersRepository.findByCustomerEmail(email);
+	}
 
 	private void encodePassword(Customer customer) {
 		String password = passwordEncoder.encode(customer.getCustomerPassword());
@@ -68,6 +72,40 @@ public class CustomerService {
 	public void updateAuthentication(Customer customer, AuthenticationType type) {
 		if(!customer.getAuthenticationType().equals(type)) {
 			customersRepository.updateAuthenticationType(customer.getCustomerId(), type);
+		}
+	}
+	
+	public void addNewCustomerUponOauthLogin(String name, String email, String countryCode) {
+		Customer customer = new Customer();
+		customer.setCustomerUsername(email);
+		customer.setCustomerEmail(email);
+		setName(name, customer);
+//		customer.setFirstName(name);
+		customer.setEnabled(true);
+		customer.setCreatedTime(new Date());
+		customer.setAuthenticationType(AuthenticationType.GOOGLE);
+		customer.setCustomerPassword("");
+		customer.setAddressLine1("");
+		customer.setAddressLine2("");
+		customer.setCity("");
+		customer.setState("");
+		customer.setPhoneNumber("");
+		customer.setPostCode("");
+		customer.setCountry(countryRepository.findByCountryCode(countryCode));
+		
+		customersRepository.save(customer);
+	}
+	
+	private void setName(String name, Customer customer) {
+		String[] nameArray = name.split(" ");
+		if (nameArray.length < 2) {
+			customer.setFirstName(name);
+			customer.setLastName("");
+		}else {
+			String firstName = nameArray[0];
+			customer.setFirstName(firstName);
+			String lastName = name.replaceFirst(firstName, "");
+			customer.setLastName(lastName);
 		}
 	}
 }

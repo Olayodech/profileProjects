@@ -2,6 +2,7 @@ package com.shop.site.country;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,7 @@ import com.shop.common.entity.Country;
 public interface CountryRepository extends CrudRepository<Country, Integer>{
 
 	List<Country> findAllByOrderByCountryNameAsc(); //custom JPA
+	
+	@Query("SELECT c FROM Country c WHERE c.countryCode = ?1")
+	Country findByCountryCode(String code);
 }
